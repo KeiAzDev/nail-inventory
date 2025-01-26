@@ -20,7 +20,7 @@ export default function StoreRegister() {
     setError('');
 
     try {
-      const res = await fetch('/api/store/register', {
+      const res = await fetch('/api/stores/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
