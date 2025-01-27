@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { ProductResponse, ApiError } from "@/types/api";
 
 export async function GET(request: NextRequest) {
   const productId = request.nextUrl.pathname.split('/').pop();
@@ -12,7 +13,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(product);
 }
 
-export async function PUT(request: NextRequest) {
+export async function PUT(request: NextRequest): Promise<NextResponse<ProductResponse | ApiError>> {
   try {
     const productId = request.nextUrl.pathname.split('/').pop();
     const body = await request.json();
@@ -50,7 +51,7 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(request: NextRequest): Promise<NextResponse<{ message: string } | ApiError>> {
   try {
     const productId = request.nextUrl.pathname.split('/').pop();
     await prisma.product.delete({ where: { id: productId } });

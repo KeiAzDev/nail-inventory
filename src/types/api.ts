@@ -1,3 +1,5 @@
+import { Type } from "@prisma/client";
+
 export type ProductResponse = {
   product: {
     id: string;
@@ -5,14 +7,17 @@ export type ProductResponse = {
     productName: string;
     colorCode: string;
     colorName: string;
-    type: 'POLISH' | 'GEL';
+    type: Type;
     price: number;
     quantity: number;
     usageCount: number;
-    lastUsed?: Date;
-    averageUsesPerMonth?: number;
-    estimatedDaysLeft?: number;
+    lastUsed: Date | null;
+    averageUsesPerMonth: number | null;
+    estimatedDaysLeft: number | null;
     minStockAlert: number;
+    storeId: string;
+    createdAt: Date;
+    updatedAt: Date;
   };
   alertStatus: {
     isLowStock: boolean;
