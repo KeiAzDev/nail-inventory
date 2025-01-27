@@ -4,15 +4,17 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   try {
     const storeId = request.nextUrl.searchParams.get('storeId');
-    if (!storeId) return Response.json({ error: 'Store ID is required' }, { status: 400 });
+    if (!storeId) return NextResponse.json({ error: 'Store ID is required' }, { status: 400 });
 
     const products = await prisma.product.findMany({
       where: { storeId },
-      orderBy: { updatedAt: 'desc' }
+      orderBy: { updatedAt: 'desc' },
+      include: { usages: true }
     });
-    return Response.json(products);
+    
+    return NextResponse.json({ products }); // オブジェクトとして返す
   } catch (error) {
-    return Response.json({ error: 'Failed to fetch products' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
   }
 }
 

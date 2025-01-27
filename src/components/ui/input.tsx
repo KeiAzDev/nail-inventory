@@ -10,7 +10,7 @@ export function Input({ label, error, ...props }: InputProps) {
         {label}
       </label>
       <input
-        className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+        className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 text-gray-800 focus:ring-indigo-500 ${
           error ? 'border-red-300' : 'border-gray-300'
         }`}
         {...props}

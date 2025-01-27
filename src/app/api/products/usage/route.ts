@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
@@ -73,4 +73,21 @@ function calculateAverageUsesPerMonth(totalUses: number, createdAt: Date): numbe
 function calculateEstimatedDaysLeft(currentQuantity: number, averageUsesPerMonth: number): number {
   const usesPerDay = averageUsesPerMonth / 30;
   return Math.round(currentQuantity / usesPerDay);
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    const productId = request.nextUrl.searchParams.get('productId');
+    if (!productId) return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
+
+    const usages = await prisma.usage.findMany({
+      where: { productId },
+      orderBy: { date: 'desc' },
+      include: { product: true }
+    });
+
+    return NextResponse.json({ usages });
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to fetch usages' }, { status: 500 });
+  }
 }
