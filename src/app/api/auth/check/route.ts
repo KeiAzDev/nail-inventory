@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
   try {
     const cookieStore = await cookies()
     const token = cookieStore.get('auth-token')
+    const storeId = request.headers.get('store-id')
 
     if (!token) {
       return NextResponse.json({ error: '認証が必要です' }, { status: 401 })
@@ -25,6 +26,11 @@ export async function GET(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json({ error: 'ユーザーが見つかりません' }, { status: 404 })
+    }
+
+    // storeIdの検証
+    if (storeId && user.storeId !== storeId) {
+      return NextResponse.json({ error: '店舗へのアクセス権がありません' }, { status: 403 })
     }
 
     return NextResponse.json({
